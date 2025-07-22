@@ -19,8 +19,8 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install html-validator-cli
-        run: npm install -g html-validator-cli
+      - name: Install html-validator
+        run: npm install -g html-validator
 
       - name: Validate HTML files
         run: |
