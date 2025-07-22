@@ -22,7 +22,26 @@ jobs:
       - name: Install html-validator-cli
         run: npm install -g html-validator-cli
 
-      - name: Run HTML validation
+      - name: Validate HTML files
         run: |
-          find . -name "*.html" -print0 | xargs -0 -n1 html-validator --format=gnu
+          echo "Buscando archivos HTML..."
+          HTML_FILES=$(find . -type f -name "*.html")
+          if [ -z "$HTML_FILES" ]; then
+            echo "No se encontraron archivos HTML para validar."
+            exit 0
+          fi
 
+          echo "Archivos encontrados:"
+          echo "$HTML_FILES"
+
+          for file in $HTML_FILES; do
+            echo "Validando: $file"
+            html-validator --file="$file" --format=gnu || exit_code=$?
+          done
+
+          if [ "$exit_code" != "" ]; then
+            echo "Se encontraron errores de validación HTML."
+            exit 1
+          else
+            echo "Todos los archivos HTML son válidos ✅"
+          fi
